@@ -174,8 +174,11 @@ public class craneDriverGame {
 
                 if (userGuess == grijperinhoud) {
                     System.out.println(goed);
-                    System.out.println("Immers, de grijperinhoud van " + grijperinhoud + " m3 x een stortgewicht van " + dichtheid + " t/m3 = " + grijpergewicht + " ton aan bulkmateriaal.");
-                    System.out.println("En de inhoud aan bulkmateriaal van " + grijpergewicht + " ton + het grijpergewicht van " + grijperinhoud + " ton = " + hijsgewicht + " ton wat de kraan nog kan tillen op deze afstand.");
+                    System.out.printf("%nImmers, de grijperinhoud van " + grijperinhoud + " m3 x een stortgewicht van " + dichtheid + " t/m3 = %.1f", grijpergewicht);
+                    System.out.printf(" ton aan bulkmateriaal.");
+                    System.out.printf("%nEn de inhoud aan bulkmateriaal van %.1f", grijpergewicht);
+                    System.out.printf(" ton + het grijpergewicht van " + grijperinhoud + " ton = %.1f", hijsgewicht);
+                    System.out.printf(" ton wat de kraan nog kan tillen op deze afstand.%n");
                     score = (short) (score + 2);
 
                     check = true;
@@ -208,3 +211,41 @@ public class craneDriverGame {
 
     } //end main
 } // end class
+
+/*
+
+
+import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
+
+public class Main {
+static int interval;
+static Timer timer;
+
+public static void main(String[] args) {
+    Scanner sc = new Scanner(System.in);
+    System.out.print("Input seconds => : ");
+    String secs = sc.nextLine();
+    int delay = 1000;
+    int period = 1000;
+    timer = new Timer();
+    interval = Integer.parseInt(secs);
+    System.out.println(secs);
+    timer.scheduleAtFixedRate(new TimerTask() {
+
+        public void run() {
+            System.out.println(setInterval());
+
+        }
+    }, delay, period);
+}
+
+private static final int setInterval() {
+    if (interval == 1)
+        timer.cancel();
+    return --interval;
+}
+}
+
+ */
