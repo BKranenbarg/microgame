@@ -13,6 +13,8 @@ public class craneDriverGame {
     static short grijperinhoud;
     static float grijpergewicht;
     static float hijsgewicht;
+    static int keuze1;
+    static int keuze2;
     static String materiaal;
 
     static String gegevens1 = "Het te verhandelen bulkmateriaal is ";
@@ -23,6 +25,7 @@ public class craneDriverGame {
     static String opties = "Type het juiste aantal kubieke meter in";
     static String goed = "Je hebt het juiste antwoord gekozen.";
     static String fout = "Dit is niet het goede antwoord.";
+    static String fouteInvoer = "Foute invoer! Type een van de genoemde getallen in.";
 
     static String[] bulkMaterial = new String[8];
     static float[] bulkDensity = new float[8];
@@ -37,7 +40,7 @@ public class craneDriverGame {
     wordt momenteel niet gebruikt omdat het gewicht in ton van de grijper
     gelijk is aan de capaciteit
     */
-    static short[] grabWeight = new short[]{2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18};
+    //static short[] grabWeight = new short[]{2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18};
 
     static boolean endplay = false;
 
@@ -45,9 +48,10 @@ public class craneDriverGame {
 
     public static void main(String[] args) {
 
-        makeStringArrays();
+        fillStringArrays();
 
         do {
+
 
             if (score >= 20) {
                 System.out.println(score + " sterren! Je hebt je doel behaald!");
@@ -71,11 +75,13 @@ public class craneDriverGame {
             System.out.println(gegevens3 + afstand + " meter");
             System.out.println(gegeven4 + hijscapaciteit + " ton");
 
+            //computer berekent het juiste antwoord
             berekenGrijperInhoud();
 
             //cheatcode
             System.out.println(grijperinhoud);
 
+            //twee false optie selecteren en door elkaar husselen met juiste antwoord
             showOptions();
 
             playGame();
@@ -88,8 +94,7 @@ public class craneDriverGame {
 
     private static void showOptions() {
         //twee keuzevariabelen, mogen niet gelijk zijn aan elkaar of aan de berekende grijperinhoud
-        int keuze1;
-        int keuze2;
+
         int aantalOpties = grabContent.length;
         keuze1 = grabContent[(int) Math.floor(Math.random() * aantalOpties)];
         do {
@@ -128,32 +133,27 @@ public class craneDriverGame {
             if (userGuess == grijperinhoud) {
                 System.out.println(goed);
                 System.out.printf("%nImmers, de grijperinhoud van " + grijperinhoud + " m3 x een stortgewicht van " + dichtheid + " t/m3 = %.1f", grijpergewicht);
-                System.out.printf(" ton aan bulkmateriaal.");
+                System.out.print(" ton aan bulkmateriaal.");
                 System.out.printf("%nEn de inhoud aan bulkmateriaal van %.1f", grijpergewicht);
                 System.out.printf(" ton + het grijpergewicht van " + grijperinhoud + " ton = %.1f", hijsgewicht);
                 System.out.printf(" ton wat de kraan nog kan tillen op deze afstand.%n");
                 score = (short) (score + 2);
 
                 check = true;
-                if (score < 20) {
+                if ((score >= 0) && (score <= 19)) {
                     System.out.println("Je hebt nu " + score + " sterren");
-                    System.out.println("Wil je nog een keer spelen? (y of n)");
-                    boolean control = false;
-                    do {
-                        System.out.println("Antwoord met y of n");
-                        String antwoord = s.next();
-                        if (antwoord.equals("y")) {
-                            control = true;
-                        } else if (antwoord.equals("n")) {
-                            endplay = true;
-                            control = true;
-                        }
-
-                    } while (!control);
+                    System.out.println("Doorgaan met spelen?");
+                    continueGame();
+                    if (((score >= 6) && (score <= 7)) || ((score >= 14) && (score <= 15))) {
+                        System.out.println(score + " sterren is een nieuwe mijlpaal.");
+                        continueGame();
+                    }//end if
                 } //end if
-            } else {
+            } else if ((userGuess == keuze1) || (userGuess == keuze2)){
                 System.out.println(fout);
                 score--;
+            } else {
+                System.out.println(fouteInvoer);
             } //end else
 
         } while (!check);
@@ -180,7 +180,7 @@ public class craneDriverGame {
         }
     }
 
-    public static void makeStringArrays() {
+    private static void fillStringArrays() {
         //String array met  8 verschillende bulkmaterialen
 
         bulkMaterial[0] = "graan";
@@ -230,8 +230,20 @@ public class craneDriverGame {
         liftingCapacity[7] = 10;
     }
 
+    private static void continueGame() {
+        boolean control = false;
+        do {
+            System.out.println("Antwoord met y of n");
+            String antwoord = s.next();
+            if (antwoord.equals("y")) {
+                control = true;
+            } else if (antwoord.equals("n")) {
+                endplay = true;
+                control = true;
+            }
 
-
+        } while (!control);
+    }
 
 
 } // end class
@@ -239,37 +251,6 @@ public class craneDriverGame {
 /*
 
 
-import java.util.Scanner;
-import java.util.Timer;
-import java.util.TimerTask;
 
-public class Main {
-static int interval;
-static Timer timer;
-
-public static void main(String[] args) {
-    Scanner sc = new Scanner(System.in);
-    System.out.print("Input seconds => : ");
-    String secs = sc.nextLine();
-    int delay = 1000;
-    int period = 1000;
-    timer = new Timer();
-    interval = Integer.parseInt(secs);
-    System.out.println(secs);
-    timer.scheduleAtFixedRate(new TimerTask() {
-
-        public void run() {
-            System.out.println(setInterval());
-
-        }
-    }, delay, period);
-}
-
-private static final int setInterval() {
-    if (interval == 1)
-        timer.cancel();
-    return --interval;
-}
-}
 
  */
