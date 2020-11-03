@@ -1,3 +1,4 @@
+import javax.swing.JOptionPane;
 import java.util.Scanner;
 import java.util.Random;
 
@@ -64,22 +65,30 @@ public class craneDriverGame {
             materiaal = bulkMaterial[materialNumber];
             dichtheid = bulkDensity[materialNumber];
 
-            System.out.println(gegevens1 + materiaal);
-            System.out.println(materiaal + gegevens2 + dichtheid + " t/m3");
+            String Gegevens1= gegevens1 + materiaal;
+
+            String Gegevens2= materiaal + gegevens2 + dichtheid + " t/m3";
+
+            JOptionPane.showMessageDialog(null, Gegevens1 + "\n" + Gegevens2,"Bulkmateriaal",
+                    JOptionPane.INFORMATION_MESSAGE);
+
 
             //random een nummer uit de werkafstanden Array kiezen
             distanceNumber = (short) Math.floor(Math.random() * operatingDistance.length);
             afstand = operatingDistance[distanceNumber];
             hijscapaciteit = liftingCapacity[distanceNumber];
 
-            System.out.println(gegevens3 + afstand + " meter");
-            System.out.println(gegeven4 + hijscapaciteit + " ton");
+            String Gegevens3=gegevens3 + afstand + " meter";
+            String Gegevens4=gegeven4 + hijscapaciteit + " ton";
+
+            JOptionPane.showMessageDialog(null, Gegevens3 + "\n" + Gegevens4,"Bulkmateriaal " + materiaal + ", met stortgewicht " + dichtheid,
+                    JOptionPane.INFORMATION_MESSAGE);
 
             //computer berekent het juiste antwoord
             berekenGrijperInhoud();
 
             //cheatcode
-            System.out.println(grijperinhoud);
+            //System.out.println(grijperinhoud);
 
             //twee false optie selecteren en door elkaar husselen met juiste antwoord
             showOptions();
@@ -92,7 +101,7 @@ public class craneDriverGame {
 
     } //end main
 
-    private static void showOptions() {
+    public static String[] showOptions() {
         //twee keuzevariabelen, mogen niet gelijk zijn aan elkaar of aan de berekende grijperinhoud
 
         int aantalOpties = grabContent.length;
@@ -102,8 +111,6 @@ public class craneDriverGame {
         } while ((keuze1 == keuze2) || (grijperinhoud == keuze1) || (grijperinhoud == keuze2));
 
         //keuze1 en keuze2 zijn altijd fout
-        System.out.println(vraag);
-
         //array aanmaken om waarden in random volgorde weer te geven
         int[] meerkeuze = new int[3];
         meerkeuze[0] = grijperinhoud;
@@ -116,20 +123,37 @@ public class craneDriverGame {
             meerkeuze[randomIndexToSwap] = meerkeuze[i];
             meerkeuze[i] = keuze;
         }
-        System.out.println("Optie a is " + meerkeuze[0] + " m3. Deze grijper weegt " + meerkeuze[0] + " ton.");
-        System.out.println("Optie b is " + meerkeuze[1] + " m3. Deze grijper weegt " + meerkeuze[1] + " ton.");
-        System.out.println("Optie c is " + meerkeuze[2] + " m3. Deze grijper weegt " + meerkeuze[2] + " ton.");
+
+        String OptieA="Optie a is " + meerkeuze[0] + " m3. Deze grijper weegt " + meerkeuze[0] + " ton.";
+        String OptieB="Optie b is " + meerkeuze[1] + " m3. Deze grijper weegt " + meerkeuze[1] + " ton.";
+        String OptieC="Optie c is " + meerkeuze[2] + " m3. Deze grijper weegt " + meerkeuze[2] + " ton.";
+
+        String [] Options = new String[] {OptieA, OptieB, OptieC};
+
+        return Options;
+
     }
 
-    private static void playGame() {
+    public static void playGame() {
         boolean check = false;
 
 
-        do {
-            System.out.println(opties);
-            userGuess = s.nextShort();
+        do {//hier moet de JOptionPane met alle informatie komen
 
+            //De meerkeuzevragen opvragen
+            String [] Opties = showOptions();
 
+            /*geeft respectievelijk 0, 1 en 2 terug
+            de waarde van grijperinhoud moeten worden gevalideerd uit de Array
+            Dit kan alleen als de int array gehusseld wordt in deze methode
+            do husselen while (userguess != grijperinhoud) {weergeven van de String array in JOptionPane}
+            deze methode moet worden omgebouwd
+            */
+            userGuess = (short) JOptionPane.showOptionDialog(null, vraag, opties, JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,null, Opties, Opties[0]);
+            System.out.println(userGuess);
+            System.out.println(grijperinhoud);
+
+            //o, 1 en 2 moet worden gerelateerd aan het goede antwoord
             if (userGuess == grijperinhoud) {
                 System.out.println(goed);
                 System.out.printf("%nImmers, de grijperinhoud van " + grijperinhoud + " m3 x een stortgewicht van " + dichtheid + " t/m3 = %.1f", grijpergewicht);
