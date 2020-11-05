@@ -33,15 +33,15 @@ public class craneDriverGame {
     static short[] operatingDistance = new short[8];
     static short[] liftingCapacity = new short[8];
 
-    //int array met 17 verschillende capaciteiten in m3 grijpers
-    static short[] grabContent = new short[]{2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18};
+    //int array met 14 verschillende capaciteiten in m3 grijpers
+    static short[] grabContent = new short[]{3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
 
 
-    /*int array met de 17 gewichten in ton voor de capaciteiten van de grijpers,
+    /*int array met de 14 gewichten in ton voor de capaciteiten van de grijpers,
     wordt momenteel niet gebruikt omdat het gewicht in ton van de grijper
     gelijk is aan de capaciteit
     */
-    //static short[] grabWeight = new short[]{2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18};
+    //static short[] grabWeight = new short[]{3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
 
     static boolean endplay = false;
 
@@ -55,7 +55,7 @@ public class craneDriverGame {
 
 
             if (score >= 20) {
-                System.out.println(score + " sterren! Je hebt je doel behaald!");
+                JOptionPane.showInternalMessageDialog(null, score + " sterren! Je hebt je doel behaald!");
                 endplay = true;
                 break;
             }
@@ -88,7 +88,7 @@ public class craneDriverGame {
             berekenGrijperInhoud();
 
             //cheatcode
-            //System.out.println(grijperinhoud);
+            System.out.println(grijperinhoud);
 
             //twee false optie selecteren en door elkaar husselen met juiste antwoord
             showOptions();
@@ -103,11 +103,12 @@ public class craneDriverGame {
 
     public static String[] showOptions() {
         //twee keuzevariabelen, mogen niet gelijk zijn aan elkaar of aan de berekende grijperinhoud
+        Random r = new Random();
 
-        int aantalOpties = grabContent.length;
-        keuze1 = grabContent[(int) Math.floor(Math.random() * aantalOpties)];
         do {
-            keuze2 = grabContent[(int) Math.floor(Math.random() * aantalOpties)];
+            keuze1 = grabContent[r.nextInt(grabContent.length)];
+            keuze2 = grabContent[r.nextInt(grabContent.length)];
+
         } while ((keuze1 == keuze2) || (grijperinhoud == keuze1) || (grijperinhoud == keuze2));
 
         //keuze1 en keuze2 zijn altijd fout
@@ -116,7 +117,7 @@ public class craneDriverGame {
         meerkeuze[0] = grijperinhoud;
         meerkeuze[1] = keuze1;
         meerkeuze[2] = keuze2;
-        Random r = new Random();
+
         for (int i = 0; i < meerkeuze.length; i++) {
             int randomIndexToSwap = r.nextInt(meerkeuze.length);
             int keuze = meerkeuze[randomIndexToSwap];
@@ -137,47 +138,60 @@ public class craneDriverGame {
     public static void playGame() {
         boolean check = false;
 
+        //De meerkeuzevragen opvragen, bij fout antwoord komen er echter weer andere opties vanwege de call showOptions
+        String [] Opties = showOptions();
 
-        do {//hier moet de JOptionPane met alle informatie komen
 
-            //De meerkeuzevragen opvragen
-            String [] Opties = showOptions();
+        do {
 
-            /*geeft respectievelijk 0, 1 en 2 terug
-            de waarde van grijperinhoud moeten worden gevalideerd uit de Array
-            Dit kan alleen als de int array gehusseld wordt in deze methode
-            do husselen while (userguess != grijperinhoud) {weergeven van de String array in JOptionPane}
-            deze methode moet worden omgebouwd
-            */
-            userGuess = (short) JOptionPane.showOptionDialog(null, vraag, opties, JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,null, Opties, Opties[0]);
-            System.out.println(userGuess);
+            //Dit toont de opties
+            JOptionPane.showInternalMessageDialog(null, Opties);
+
+            //dit is een invoerveld, alleen kan de meerkeuzearray hier niet in
+            userGuess = Short.parseShort(JOptionPane.showInputDialog(null, vraag, opties, JOptionPane.QUESTION_MESSAGE));
+
             System.out.println(grijperinhoud);
 
-            //o, 1 en 2 moet worden gerelateerd aan het goede antwoord
+            //dichtheid en hijsgewicht op 1 cijfer achter de komma afronden in OptionPane (%.1f)
             if (userGuess == grijperinhoud) {
-                System.out.println(goed);
-                System.out.printf("%nImmers, de grijperinhoud van " + grijperinhoud + " m3 x een stortgewicht van " + dichtheid + " t/m3 = %.1f", grijpergewicht);
-                System.out.print(" ton aan bulkmateriaal.");
-                System.out.printf("%nEn de inhoud aan bulkmateriaal van %.1f", grijpergewicht);
-                System.out.printf(" ton + het grijpergewicht van " + grijperinhoud + " ton = %.1f", hijsgewicht);
-                System.out.printf(" ton wat de kraan nog kan tillen op deze afstand.%n");
+                JOptionPane.showMessageDialog(null,
+                        "\n Immers, de grijperinhoud van " + grijperinhoud + " m3 x een stortgewicht van "
+                                + dichtheid + " t/m3 = " + grijpergewicht + " ton aan bulkmateriaal."
+                                + " \n En de inhoud aan bulkmateriaal van " + grijpergewicht + " ton" +
+                                " het grijpergewicht van " + grijperinhoud + " ton = " + hijsgewicht +
+                                " ton wat de kraan nog kan tillen op deze afstand.", goed,
+                        JOptionPane.INFORMATION_MESSAGE);
+
                 score = (short) (score + 2);
 
                 check = true;
                 if ((score >= 0) && (score <= 19)) {
-                    System.out.println("Je hebt nu " + score + " sterren");
-                    System.out.println("Doorgaan met spelen?");
+
                     continueGame();
-                    if (((score >= 6) && (score <= 7)) || ((score >= 14) && (score <= 15))) {
-                        System.out.println(score + " sterren is een nieuwe mijlpaal.");
-                        continueGame();
-                    }//end if
+
+                    if (((score == 6) || (score == 7)) || ((score == 14) || (score == 15))) {
+                        JOptionPane.showMessageDialog(null, score + " sterren is een nieuwe mijlpaal.", "improving",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    }
+
+
                 } //end if
-            } else if ((userGuess == keuze1) || (userGuess == keuze2)){
-                System.out.println(fout);
+            } else if ((userGuess == keuze1) || (userGuess == keuze2)) {
+                JOptionPane.showMessageDialog(null, fout, "try again",
+                        JOptionPane.INFORMATION_MESSAGE);
                 score--;
-            } else {
-                System.out.println(fouteInvoer);
+            //hier moet code komen voor het gev
+            /*}   else if (userGuess == JOptionPane.OK_OPTION) {
+                    JOptionPane.showMessageDialog(null, opties, "invoer vereist",
+                    JOptionPane.INFORMATION_MESSAGE);
+            } else if (userGuess == JOptionPane.CANCEL_OPTION) {
+                endplay = true;
+                break;*/
+
+        } else {
+                JOptionPane.showMessageDialog(null, fouteInvoer, "pay attention",
+                        JOptionPane.INFORMATION_MESSAGE);
+
             } //end else
 
         } while (!check);
@@ -256,17 +270,19 @@ public class craneDriverGame {
 
     private static void continueGame() {
         boolean control = false;
-        do {
-            System.out.println("Antwoord met y of n");
-            String antwoord = s.next();
-            if (antwoord.equals("y")) {
-                control = true;
-            } else if (antwoord.equals("n")) {
-                endplay = true;
-                control = true;
-            }
 
-        } while (!control);
+        int reply = JOptionPane.showConfirmDialog(null,
+                "Doorgaan met spelen?",
+                "Je hebt nu " + score + " sterren.", JOptionPane.YES_NO_OPTION);
+
+
+            if (reply == JOptionPane.YES_OPTION) {
+                endplay = false;
+                //endplay = true stopt het spel niet meer
+            } else System.exit(0);
+
+
+
     }
 
 
