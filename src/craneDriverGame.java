@@ -158,7 +158,7 @@ public class craneDriverGame {
                         "\n Immers, de grijperinhoud van " + grijperinhoud + " m3 x een stortgewicht van "
                                 + dichtheid + " t/m3 = " + grijpergewicht + " ton aan bulkmateriaal."
                                 + " \n En de inhoud aan bulkmateriaal van " + grijpergewicht + " ton" +
-                                " het grijpergewicht van " + grijperinhoud + " ton = " + hijsgewicht +
+                                " + het grijpergewicht van " + grijperinhoud + " ton = " + hijsgewicht +
                                 " ton wat de kraan nog kan tillen op deze afstand.", goed,
                         JOptionPane.INFORMATION_MESSAGE);
 
@@ -180,7 +180,7 @@ public class craneDriverGame {
                 JOptionPane.showMessageDialog(null, fout, "try again",
                         JOptionPane.INFORMATION_MESSAGE);
                 score--;
-            //hier moet code komen voor het gev
+            //hier moet code komen voor het geval er niet wordt ingevoerd
             /*}   else if (userGuess == JOptionPane.OK_OPTION) {
                     JOptionPane.showMessageDialog(null, opties, "invoer vereist",
                     JOptionPane.INFORMATION_MESSAGE);
@@ -193,7 +193,7 @@ public class craneDriverGame {
                         JOptionPane.INFORMATION_MESSAGE);
 
             } //end else
-
+        //er moet code worden toegevoegd dat het spel eindigt wanneer het doel behaald is
         } while (!check);
 
     }
